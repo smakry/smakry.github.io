@@ -3,4 +3,22 @@
 
 node_modules
 
+lodash.mergewith
+lodash.template
+stringstream
+braces
+clean-css
+fstream
+tar
+extend
+minimatch
+randomatic
+cryptiles
+sshpk
+lodash
+tough-cookie
+hoek
+
 _site
+
+
