@@ -1,0 +1,86 @@
+---
+layout: post
+title: '软链接合硬链接'
+date: 2020-11-26
+author: smakry
+tags: 软链接 硬链接
+---
+
+> 文件的共享方式
+
+### 链接
+	
+	链接实际上是一种文件共享的方式。
+
+### 区别
+
+1. 使用角度二者没有任何区别，都与正常的文件访问方式一样，支持读写，如果是可执行文件的话也可以直接执行。
+
+2. 硬链接：
+相当于文件别名，文件的一个名字删掉了，它还是它。直到名字全删了它才不存在。
+
+```sh
+smakry@smadeMac-mini testlink % ls
+smakry@smadeMac-mini testlink % touch a.txt && echo "this is a.txt file." > a.txt
+smakry@smadeMac-mini testlink % ls
+a.txt
+smakry@smadeMac-mini testlink % ln a.txt hardlink.txt
+smakry@smadeMac-mini testlink % ls
+a.txt		hardlink.txt
+smakry@smadeMac-mini testlink % ls -li
+total 16
+95313223 -rw-r--r--  2 smakry  wheel  20 11 26 16:38 a.txt
+95313223 -rw-r--r--  2 smakry  wheel  20 11 26 16:38 hardlink.txt
+smakry@smadeMac-mini testlink % cat hardlink.txt 
+this is a.txt file.
+smakry@smadeMac-mini testlink % echo "test hardlink.txt file" >> hardlink.txt 
+smakry@smadeMac-mini testlink % cat hardlink.txt 
+this is a.txt file.
+test hardlink.txt file
+smakry@smadeMac-mini testlink % cat a.txt 
+this is a.txt file.
+test hardlink.txt file
+smakry@smadeMac-mini testlink % rm hardlink.txt 
+smakry@smadeMac-mini testlink % ls
+a.txt
+smakry@smadeMac-mini testlink % cat a.txt 
+this is a.txt file.
+test hardlink.txt file
+```
+
+1.1 ls -li最左侧是文件的inode值`指向内存地址`（可以简单想成C语言中的指针，指向物理硬盘的一个区块，事实上文件系统会维护一个引用计数，只要文件指向这个区块，它就不会从硬盘上消失）。
+1.2 修改其中一个文件，另一个文件也同样变更
+1.3 删除一个文件，文件引用还在，另一个文件还可以读取
+
+3. 软链接（符号链接）：
+一个快捷方式，软链接本身是一个文本文件，其中包含有另一个文件的`位置信息`，位置内容删除，软链接依然存在只是不生效。
+
+```sh
+smakry@smadeMac-mini testlink % ls
+smakry@smadeMac-mini testlink % touch a.txt && echo "this is a.txt file." > a.txt
+smakry@smadeMac-mini testlink % ls -li
+total 8
+98403465 -rw-r--r--  1 smakry  wheel  20 12  7 10:09 a.txt
+smakry@smadeMac-mini testlink % ln -s a.txt b.txt
+smakry@smadeMac-mini testlink % ls -li
+total 8
+98403465 -rw-r--r--  1 smakry  wheel  20 12  7 10:09 a.txt
+98403469 lrwxr-xr-x  1 smakry  wheel   5 12  7 10:09 b.txt -> a.txt
+smakry@smadeMac-mini testlink % cat b.txt 
+this is a.txt file.
+smakry@smadeMac-mini testlink % rm a.txt 
+smakry@smadeMac-mini testlink % ls
+b.txt
+smakry@smadeMac-mini testlink % ls -li
+total 0
+98403469 lrwxr-xr-x  1 smakry  wheel  5 12  7 10:09 b.txt -> a.txt
+smakry@smadeMac-mini testlink % cat b.txt
+cat: b.txt: No such file or directory
+smakry@smadeMac-mini testlink % touch a.txt  #重新还原文件，链接重新生效
+smakry@smadeMac-mini testlink % cat b.txt 
+smakry@smadeMac-mini testlink % 
+```
+
+
+
+

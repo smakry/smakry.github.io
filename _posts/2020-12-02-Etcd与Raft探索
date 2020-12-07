@@ -1,0 +1,11 @@
+---
+layout: post
+title: 'Etcd与Raft探索'
+date: 2020-12-02
+author: smakry
+tags: Etcd Raft
+---
+
+> 同步算法
+
+https://blog.51cto.com/5660061/2381641
