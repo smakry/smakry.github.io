@@ -1,0 +1,15 @@
+---
+layout: post
+title: '全球同服设计'
+date: 2022-07-02
+author: smakry
+tags: 游戏 全球同服 架构设计
+---
+
+> 游戏服务器是IO密集型服务器，主要瓶颈在IO，而不在于CPU
+
+服务器问题经常会出现在网络IO，带宽，内存，数据库磁盘读写上面，基本上不会出现在CPU。
+
+1. bigworld架构
+2. 数据库读写剥离单独的数据库读写服务，提供单独的逻辑服务器用于滑动更新吗
+3. 服务设计图 ![https://github.com/smakry/drawio/blob/master/architecture.drawio.png]
